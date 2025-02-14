@@ -1,4 +1,4 @@
-package com.arom.yeojung.config;
+package com.arom.yeojung.util.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
