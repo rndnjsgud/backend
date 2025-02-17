@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

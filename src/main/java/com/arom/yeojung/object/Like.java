@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Table(name = "likes")
 public class Like {
 
     @Id
@@ -20,7 +21,7 @@ public class Like {
     //private User user;
 
     @ManyToOne
-    @JoinColumn(name = "diary_id", nullable = false)
+    @JoinColumn(name = "diaryid", nullable = false)
     private Diary diary;
 
     private LocalDateTime createdAt;

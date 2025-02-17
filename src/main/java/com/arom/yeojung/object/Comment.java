@@ -1,5 +1,6 @@
 package com.arom.yeojung.object;
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class Comment {
     //private User user;
 
     @ManyToOne
-    @Column(name = "diaryId", nullable = false)
+    @JoinColumn(name = "diaryid", nullable = false)
     private Diary diary;
 
     private String content;
