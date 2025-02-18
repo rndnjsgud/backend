@@ -17,7 +17,7 @@ public class Budget {
     private Long budgetId;
 
     //예산 카테고리
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BudgetCategory budgetCategory;
 
     //예산 이름
@@ -29,7 +29,7 @@ public class Budget {
     private Long budgetAmount;
 
     //예산 유형(전체 예산인지, 당일 예산인지)
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BudgetType budgetType;
 
     @ManyToOne
