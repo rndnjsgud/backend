@@ -26,7 +26,7 @@ public class TotalPlan {
 
   private LocalDate endDate;
 
-  private BigInteger totalBudget;
+  private Long totalBudget;
 
   private String totalPlanDescription;
 
