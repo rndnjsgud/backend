@@ -32,7 +32,7 @@ public class Budget {
     @Enumerated(EnumType.STRING)
     private BudgetType budgetType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subPlanId", nullable = false)
     private SubPlan subPlan;
 }

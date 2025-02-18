@@ -31,5 +31,5 @@ public class Location {
 
     //경도
     @Column(nullable = false, precision = 9, scale = 6)
-    private BigDecimal longtitude;
+    private BigDecimal longitude;
 }

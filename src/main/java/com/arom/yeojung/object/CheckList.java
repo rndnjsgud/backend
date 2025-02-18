@@ -24,7 +24,7 @@ public class CheckList {
     @Column(nullable = true)
     private Boolean isChecked;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planId", nullable = false)
     private TotalPlan totalPlan;
 }
