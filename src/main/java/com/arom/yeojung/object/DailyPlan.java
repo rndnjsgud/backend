@@ -28,6 +28,6 @@ public class DailyPlan {
   private TotalPlan totalPlan;
 
   @Column(nullable = false)
-  private LocalDate dailyPanDate;
+  private LocalDate dailyPlanDate;
 
 }
