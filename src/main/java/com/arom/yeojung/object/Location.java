@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Location")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -24,6 +23,10 @@ public class Location {
     //군, 구
     @Column(nullable = false, length = 50)
     private String locationDistrict;
+
+    //주소
+    @Column(nullable = false)
+    private String locationAddress;
 
     //위도
     @Column(nullable = false, precision = 9, scale = 6)

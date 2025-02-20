@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "CheckList")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -23,6 +22,10 @@ public class CheckList {
     //완료 여부
     @Column(nullable = true)
     private Boolean isChecked;
+
+    //체크리스트 설명
+    @Column(nullable = true)
+    private String discription;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planId", nullable = false)
