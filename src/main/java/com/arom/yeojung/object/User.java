@@ -42,7 +42,4 @@ public class User extends BaseTimeEntity{
   // 프로필 사진 URL
   private String profileImageUrl;
 
-  // 중간 엔티티 UserPlan과 연결
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<UserPlan> plans = new ArrayList<>();
 }
