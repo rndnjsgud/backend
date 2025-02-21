@@ -1,4 +1,4 @@
-package com.arom.yeojung.object.dto;
+package com.arom.yeojung.object.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;
