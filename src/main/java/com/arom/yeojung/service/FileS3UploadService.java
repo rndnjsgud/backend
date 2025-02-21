@@ -1,6 +1,8 @@
 package com.arom.yeojung.service;
 
 
+import com.arom.yeojung.object.File;
+import com.arom.yeojung.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,18 +12,20 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class S3Uploader {
+public class FileS3UploadService {
 
     private final String bucketName = "yeojung-bucket";
     private final S3Client s3Client;
+    private final FileService fileService;
 
-    public S3Uploader() {
+    public FileS3UploadService(FileService fileService) {
+        this.fileService = fileService;
         this.s3Client = S3Client.builder()
                 .region(Region.AP_NORTHEAST_2) //서울 지역
                 .credentialsProvider(StaticCredentialsProvider.create(
@@ -32,8 +36,9 @@ public class S3Uploader {
                 .build();
     }
 
-    public String uploadFile(MultipartFile file, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+    public File uploadAndSaveFile(MultipartFile file) {
+        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+        String fileUrl = "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
 
         try {
             s3Client.putObject(PutObjectRequest.builder()
@@ -41,8 +46,7 @@ public class S3Uploader {
                             .key(fileName)
                             .build(),
                     RequestBody.fromBytes(file.getBytes()));
-
-            return "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+            return fileService.save(fileName, fileUrl);
         } catch (IOException e) {
             throw new RuntimeException("S3 Failed to upload file", e);
         }
