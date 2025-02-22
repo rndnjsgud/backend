@@ -33,5 +33,4 @@ public class TotalPlan {
   private int travelDuration;
 
   //Todo: uer totalplan 중간 엔티티 만들기
-
 }
