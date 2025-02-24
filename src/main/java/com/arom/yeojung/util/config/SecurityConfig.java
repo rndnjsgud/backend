@@ -1,5 +1,6 @@
 package com.arom.yeojung.util.config;
 
+import com.arom.yeojung.security.filter.JWTFilter;
 import com.arom.yeojung.security.filter.LoginFilter;
 import com.arom.yeojung.security.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("login", "/", "/join").permitAll()
                         .anyRequest().authenticated());
+
+        http
+                .addFilterAt(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
