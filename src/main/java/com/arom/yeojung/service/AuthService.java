@@ -30,5 +30,7 @@ public class AuthService {
 
         data.setUsername(username);
         data.setPassword(bCryptPasswordEncoder.encode(password)); // 암호화 진행 후 주입
+
+        userRepository.save(data);
     }
 }
