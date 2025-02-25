@@ -2,7 +2,6 @@ package com.arom.yeojung.service;
 
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.dto.user.CustomUserDetails;
-import com.arom.yeojung.object.dto.user.NicknameRequest;
 import com.arom.yeojung.object.dto.user.ProfileImageRequest;
 import com.arom.yeojung.object.dto.user.UserDto;
 import com.arom.yeojung.repository.UserRepository;
@@ -45,23 +44,23 @@ public class UserService {
 
   // 닉네임 변경
   @Transactional
-  public void updateNickname(NicknameRequest request, User user) {
-    String newNickname = request.getNickname();
-
-    // 현재 닉네임과 동일하면 변경 불필요
-    if (user.getNickname().equals(newNickname)) {
-      throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
-    }
-
+  public void updateNickname(String nickname, User user) {
     // 닉네임 중복 체크
-    if (userRepository.existsByNickname(newNickname)) {
+    if (userRepository.existsByNickname(nickname)) {
       throw new CustomException(ErrorCode.DUPLICATED_NICKNAME);
     }
 
-    user.setNickname(newNickname);
+    user.setNickname(nickname);
     userRepository.save(user);
     updateSecurityContext(user);
     log.info("닉네임을 변경하였습니다. nickname: {}", user.getNickname());
+  }
+
+  @Transactional(readOnly = true)
+  public Boolean checkNicknameDuplicate(String nickname) {
+    // 닉네임 중복 체크
+    log.info("이미 사용중인 닉네임입니다.");
+    return !userRepository.existsByNickname(nickname);
   }
 
   // 프로필 사진 업로드 (등록 & 변경)

@@ -1,6 +1,6 @@
 package com.arom.yeojung.object.dto.user;
 
-import jakarta.validation.constraints.NotNull;
+import com.arom.yeojung.object.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +12,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NicknameRequest {
+public class FollowResponse {
 
-  @NotNull(message = "닉네임을 입력하세요")
-  private String nickname;
+  private User follower;
+  private User followee;
 }

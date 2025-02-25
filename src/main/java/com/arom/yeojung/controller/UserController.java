@@ -2,7 +2,6 @@ package com.arom.yeojung.controller;
 
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.dto.user.CustomUserDetails;
-import com.arom.yeojung.object.dto.user.NicknameRequest;
 import com.arom.yeojung.object.dto.user.ProfileImageRequest;
 import com.arom.yeojung.object.dto.user.UserDto;
 import com.arom.yeojung.service.UserService;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,10 +42,16 @@ public class UserController {
   @PatchMapping("/nickname")
   public ResponseEntity<UserDto> updateNickname(
       @AuthenticationPrincipal CustomUserDetails userDetails,
-      @RequestBody NicknameRequest request) {
+      @RequestParam String nickname) {
     User user = userDetails.getUser();
-    userService.updateNickname(request, user);
+    userService.updateNickname(nickname, user);
     return ResponseEntity.ok(userService.getMemberInfo(user.getUserId()));
+  }
+
+  // 닉네임 중복 체크
+  @GetMapping("/nickname/duplicate")
+  public ResponseEntity<Boolean> duplicateNickname(@RequestParam String nickname) {
+    return ResponseEntity.ok(userService.checkNicknameDuplicate(nickname));
   }
 
   // 프로필 사진 등록

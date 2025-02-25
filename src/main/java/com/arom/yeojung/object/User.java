@@ -37,4 +37,6 @@ public class User extends BaseTimeEntity{
 
   // 프로필 사진 URL
   private String profileImageUrl;
+
+  private int followerCount;
 }

@@ -26,9 +26,9 @@ public class Follow extends BaseTimeEntity{
 
   // 팔로우 하는 사람 아이디
   @ManyToOne(fetch = FetchType.LAZY)
-  private User followingId;
+  private User follower;
 
   // 팔로우 받는 사람 아이디
   @ManyToOne(fetch = FetchType.LAZY)
-  private User followerId;
+  private User followee;
 }
