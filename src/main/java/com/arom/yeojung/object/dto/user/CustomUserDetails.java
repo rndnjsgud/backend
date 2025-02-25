@@ -54,12 +54,4 @@ public class CustomUserDetails implements UserDetails {
   public Long getUserId() {
     return user.getUserId();
   }
-
-  public String getNickname() {
-    return user.getNickname();
-  }
-
-  public String getProfileImageUrl() {
-    return user.getProfileImageUrl();
-  }
 }

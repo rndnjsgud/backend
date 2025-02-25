@@ -24,11 +24,11 @@ public class Follow extends BaseTimeEntity{
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long followId;
 
-  // 팔로우 하는 사람 아이디
+  // 팔로우 하는 사람
   @ManyToOne(fetch = FetchType.LAZY)
   private User follower;
 
-  // 팔로우 받는 사람 아이디
+  // 팔로우 받는 사람
   @ManyToOne(fetch = FetchType.LAZY)
   private User followee;
 }
