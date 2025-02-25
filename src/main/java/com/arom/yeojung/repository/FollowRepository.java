@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
+  boolean existsByFollowerAndFollowee(User follower, User followee);
+
   Optional<Follow> findByFollowerAndFollowee(User follower, User followee);
 
   Page<Follow> findAllByFollowee(User followee, Pageable pageable);
