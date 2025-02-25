@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DiaryDto extends BaseTimeEntity {
+public class DiaryDto{
 
     private Long userId;
     private String title;

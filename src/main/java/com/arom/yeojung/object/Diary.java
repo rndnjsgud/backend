@@ -31,10 +31,6 @@ public class Diary extends BaseTimeEntity{
     //제목
     private String title;
 
-    //생성시각과 수정시각
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-
     //조회수
     private Long viewCount;
     //댓글수
@@ -64,8 +60,8 @@ public class Diary extends BaseTimeEntity{
         DiaryDto dto = new DiaryDto();
         dto.setTitle(diary.title);
         dto.setStatus(diary.status);
-        dto.setCreatedDate(diary.createdDate);
-        dto.setUpdatedDate(diary.updatedDate);
+        dto.setCreatedDate(diary.getCreatedDate());
+        dto.setUpdatedDate(diary.getUpdatedDate());
         dto.setViewCount(diary.viewCount);
         dto.setCommentCount(diary.commentCount);
         dto.setLikeCount(diary.likeCount);
