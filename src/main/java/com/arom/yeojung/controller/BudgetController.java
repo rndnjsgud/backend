@@ -38,6 +38,7 @@ public class BudgetController {
         return ResponseEntity.ok(responseList);
     }
 
+    //예산 타입에 따른 조회
     @GetMapping("/byBudgetType")
     public ResponseEntity<List<BudgetResponseDTO>> getBudgetsByBudgetType(BudgetType budgetType){
         List<BudgetResponseDTO> responseList = budgetService.getBudgetsByBudgetType(budgetType);
