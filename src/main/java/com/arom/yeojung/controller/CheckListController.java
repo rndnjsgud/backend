@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/checklists")
+@RequestMapping("/api/checklists")
 public class CheckListController {
     private final CheckListService  checkListService;
 
