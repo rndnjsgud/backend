@@ -2,13 +2,12 @@ package com.arom.yeojung.object;
 
 import jakarta.persistence.*;
 import jdk.jfr.Unsigned;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class Budget {
     @Id
