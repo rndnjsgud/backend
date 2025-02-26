@@ -1,24 +1,24 @@
 package com.arom.yeojung.service;
 
 import com.arom.yeojung.object.Location;
+import com.arom.yeojung.object.LocationType;
 import com.arom.yeojung.object.dto.LocationRequestDTO;
 import com.arom.yeojung.object.dto.LocationResponseDTO;
 import com.arom.yeojung.repository.CheckListRepository;
 import com.arom.yeojung.repository.LocationRepository;
 import com.arom.yeojung.repository.TotalPlanRepository;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;
-
-    public LocationService(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-    }
-
     // 생성
     public LocationResponseDTO createLocation(LocationRequestDTO dto) {
         Location location = Location.builder()
@@ -37,7 +37,7 @@ public class LocationService {
     // 조회 (단건)
     public LocationResponseDTO getLocation(Long id) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOCATION_NOT_FOUND));
         return mapToResponseDTO(location);
     }
 
@@ -48,10 +48,17 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    // LocationType에 따른 조회
+    public List<LocationResponseDTO> getLocationsByType(LocationType locationType){
+        return locationRepository.findByLocationType(locationType).stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     // 수정
     public LocationResponseDTO updateLocation(Long id, LocationRequestDTO dto) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOCATION_NOT_FOUND));
 
         location.setLocationCity(dto.getLocationCity());
         location.setLocationDistrict(dto.getLocationDistrict());
@@ -67,7 +74,7 @@ public class LocationService {
     // 삭제
     public void deleteLocation(Long id) {
         if(!locationRepository.existsById(id)){
-            throw new RuntimeException("Location not found with id: " + id);
+            throw new CustomException(ErrorCode.LOCATION_NOT_FOUND);
         }
         locationRepository.deleteById(id);
     }
