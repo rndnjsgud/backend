@@ -3,14 +3,14 @@ package com.arom.yeojung.object;
 import com.arom.yeojung.object.dto.CheckListRequestDTO;
 import com.arom.yeojung.object.dto.CheckListResponseDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CheckList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

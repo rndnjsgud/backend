@@ -6,27 +6,26 @@ import com.arom.yeojung.object.dto.CheckListRequestDTO;
 import com.arom.yeojung.object.dto.CheckListResponseDTO;
 import com.arom.yeojung.repository.CheckListRepository;
 import com.arom.yeojung.repository.TotalPlanRepository;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CheckListService {
 
     private final CheckListRepository checkListRepository;
     private final TotalPlanRepository totalPlanRepository;
 
-    public CheckListService(CheckListRepository checklistRepository, TotalPlanRepository totalPlanRepository) {
-        this.checkListRepository = checklistRepository;
-        this.totalPlanRepository = totalPlanRepository;
-    }
-
     public CheckListResponseDTO createCheckList(CheckListRequestDTO requestDTO) {
         // DTO에 포함된 planId를 사용해 연결된 TotalPlan 엔티티 조회
         TotalPlan totalPlan = totalPlanRepository.findById(requestDTO.getTotalPlanId())
-                .orElseThrow(() -> new EntityNotFoundException("TotalPlan not found with id: " + requestDTO.getTotalPlanId()));
+                .orElseThrow(() -> new CustomException(ErrorCode.CHECKLIST_NOT_FOUND));
 
         // CheckList 엔티티 생성 및 DTO 값 반영
         CheckList checkList = new CheckList();
@@ -68,7 +67,8 @@ public class CheckListService {
         if (updateDTO.getTotalPlanId() != null &&
                 !checklist.getTotalPlan().getTotalPlanId().equals(updateDTO.getTotalPlanId())) {
             TotalPlan totalPlan = totalPlanRepository.findById(updateDTO.getTotalPlanId())
-                    .orElseThrow(() -> new EntityNotFoundException("TotalPlan not found with id: " + updateDTO.getTotalPlanId()));
+                    .orElseThrow(() -> new CustomException(ErrorCode.TOTAL_PLAN_NOT_FOUND));
+                            //new EntityNotFoundException("TotalPlan not found with id: " + updateDTO.getTotalPlanId()));
             checklist.setTotalPlan(totalPlan);
         }
 
@@ -86,7 +86,7 @@ public class CheckListService {
     public void deleteCheckList(Long id) {
         // 삭제할 체크리스트 존재 여부 확인
         CheckList checkList = checkListRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Checklist not found with id: " + id));
+                .orElseThrow(() -> new CustomException(ErrorCode.CHECKLIST_NOT_FOUND));
         // 체크리스트 삭제
         checkListRepository.delete(checkList);
     }
