@@ -60,6 +60,14 @@ public class BudgetService {
                 .collect(Collectors.toList());
     }
 
+    //subPlanId에 따른 조회
+    public List<BudgetResponseDTO> getBudgetListsBySubPlanId(Long subPlanID) {
+        List<Budget> budgetList = budgetRepository.findBySubPlan_SubPlanId(subPlanID);
+        return budgetList.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     // 수정
     public BudgetResponseDTO updateBudget(Long id, BudgetRequestDTO dto) {
         Budget budget = budgetRepository.findById(id)

@@ -3,6 +3,7 @@ package com.arom.yeojung.controller;
 import com.arom.yeojung.object.BudgetType;
 import com.arom.yeojung.object.dto.BudgetRequestDTO;
 import com.arom.yeojung.object.dto.BudgetResponseDTO;
+import com.arom.yeojung.object.dto.CheckListResponseDTO;
 import com.arom.yeojung.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,13 @@ public class BudgetController {
     public ResponseEntity<List<BudgetResponseDTO>> getBudgetsByBudgetType(BudgetType budgetType){
         List<BudgetResponseDTO> responseList = budgetService.getBudgetsByBudgetType(budgetType);
         return ResponseEntity.ok(responseList);
+    }
+
+    //subPlanId에 따른 조회
+    @GetMapping("/{subPlanId}")
+    public ResponseEntity<List<BudgetResponseDTO>> getBudgetListsBySubPlanId(@PathVariable Long subPlanId){
+        List<BudgetResponseDTO> responseLists = budgetService.getBudgetListsBySubPlanId(subPlanId);
+        return ResponseEntity.ok(responseLists);
     }
 
     // 예산 수정
