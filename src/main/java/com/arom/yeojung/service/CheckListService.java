@@ -43,7 +43,7 @@ public class CheckListService {
 
     // 한 planId에 속하는 모든 체크리스트 조회
     public List<CheckListResponseDTO> getCheckListsByTotalPlanId(Long planId) {
-        List<CheckList> checklistList = checkListRepository.findByTotalPlan_PlanId(planId);
+        List<CheckList> checklistList = checkListRepository.findByTotalPlan_TotalPlanId(planId);
         return checklistList.stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
