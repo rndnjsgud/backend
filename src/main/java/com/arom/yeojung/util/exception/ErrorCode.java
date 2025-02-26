@@ -20,10 +20,21 @@ public enum ErrorCode {
 
   TOTAL_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 TotalPlan을 찾을 수 없습니다."),
 
+  TOTAL_PLAN_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "해당 TotalPlan은 이미 삭제되었습니다."),
+
   DAILY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 DailyPlan을 찾을 수 없습니다."),
 
-  DAILY_PLAN_NOT_IN_TOTAL_PLAN(HttpStatus.BAD_REQUEST, "DailyPlan이 해당 TotalPlan에 속해 있지 않습니다.");
+  DAILY_PLAN_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "해당 DailyPlan은 이미 삭제되었습니다."),
 
+  DAILY_PLAN_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "해당 TotalPlan에 이미 DailyPlan이 존재합니다."),
+
+  DAILY_PLAN_NOT_IN_TOTAL_PLAN(HttpStatus.BAD_REQUEST, "DailyPlan이 해당 TotalPlan에 속해 있지 않습니다."),
+
+  SUB_PLAN_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "해당 SubPlan은 이미 삭제되었습니다."),
+
+  SUB_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 SubPlan을 찾을 수 없습니다."),
+
+  SUB_PLAN_NOT_IN_DAILY_PLAN(HttpStatus.BAD_REQUEST, "SubPlan이 해당 DailyPlan에 속해 있지 않습니다.");
 
   private final HttpStatus status;
   private final String message;
