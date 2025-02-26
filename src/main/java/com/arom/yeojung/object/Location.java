@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

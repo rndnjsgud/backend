@@ -3,6 +3,7 @@ package com.arom.yeojung.controller;
 import com.arom.yeojung.object.dto.CheckListRequestDTO;
 import com.arom.yeojung.object.dto.CheckListResponseDTO;
 import com.arom.yeojung.service.CheckListService;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/checklists")
 public class CheckListController {
     private final CheckListService  checkListService;
-
-    public CheckListController(CheckListService checkListService){
-        this.checkListService = checkListService;
-    }
 
     //체크리스트 생성
     @PostMapping

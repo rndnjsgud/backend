@@ -22,8 +22,13 @@ public enum ErrorCode {
 
   DAILY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 DailyPlan을 찾을 수 없습니다."),
 
-  DAILY_PLAN_NOT_IN_TOTAL_PLAN(HttpStatus.BAD_REQUEST, "DailyPlan이 해당 TotalPlan에 속해 있지 않습니다.");
+  DAILY_PLAN_NOT_IN_TOTAL_PLAN(HttpStatus.BAD_REQUEST, "DailyPlan이 해당 TotalPlan에 속해 있지 않습니다."),
 
+  //CheckList
+  CHECKLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 CheckList를 찾을 수 없습니다."),
+
+  //Location
+  LOCATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Location을 찾을 수 없습니다");
 
   private final HttpStatus status;
   private final String message;

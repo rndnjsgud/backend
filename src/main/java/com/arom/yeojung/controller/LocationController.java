@@ -3,19 +3,18 @@ package com.arom.yeojung.controller;
 import com.arom.yeojung.object.dto.LocationRequestDTO;
 import com.arom.yeojung.object.dto.LocationResponseDTO;
 import com.arom.yeojung.service.LocationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/locations")
 public class LocationController {
 
     private final LocationService locationService;
 
-    public LocationController(LocationService locationService){
-        this.locationService = locationService;
-    }
     // 생성
     @PostMapping
     public LocationResponseDTO createLocation(@RequestBody LocationRequestDTO dto) {
