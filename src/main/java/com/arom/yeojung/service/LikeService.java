@@ -8,6 +8,8 @@ import com.arom.yeojung.object.dto.LikeDto;
 import com.arom.yeojung.repository.DiaryRepository;
 import com.arom.yeojung.repository.LikeRepository;
 import com.arom.yeojung.repository.UserRepository;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +25,14 @@ public class LikeService extends BaseTimeEntity {
     //좋아요 생성
     public LikeDto createLike(LikeDto likeDto) {
         User user = userRepository.findById(likeDto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException("not found user"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Diary diary = diaryRepository.findById(likeDto.getDiaryId())
-                .orElseThrow(() -> new NoSuchElementException("not found diary"));
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
 
         Like like = new Like();
         like.setUser(user);
         like.setDiary(diary);
-        like.setCreatedDate(getCreatedDate());
         likeRepository.save(like);
         return likeDto;
     }
@@ -39,7 +40,10 @@ public class LikeService extends BaseTimeEntity {
     //좋아요 삭제
     public String deleteLike(LikeDto likeDto) {
         Like like = likeRepository.findByUserIdAndDiaryId(likeDto.getUserId(), likeDto.getDiaryId())
-                .orElseThrow(() -> new NoSuchElementException("not found like"));
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
+
+        validateAuthorization(like, currentUser);
+
         likeRepository.delete(like);
         return "success";
     }

@@ -3,6 +3,8 @@ package com.arom.yeojung.service;
 import com.arom.yeojung.object.*;
 import com.arom.yeojung.object.dto.DiaryDto;
 import com.arom.yeojung.repository.*;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,31 +28,29 @@ public class DiaryService {
     private final FileS3UploadService fileS3UploadService;
 
     //다이어리 생성
+    @Transactional
     public DiaryDto createDiary(DiaryDto diaryDto) {
         //dto의 uerId를 통해 UserRepository에서 사용자 검색
         User user = userRepository.findById(diaryDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("not found user"));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Diary diary = new Diary();
         diary.setUser(user);
-        diary.setCreatedDate(LocalDateTime.now());
-        diary.setUpdatedDate(LocalDateTime.now());
         diary.setTitle(diaryDto.getTitle());
         diary.setViewCount(0L);
         diary.setCommentCount(0L);  //댓글이라 좋아요 수 추가
         diary.setLikeCount(0L);     //
         diary.setStatus(diaryDto.getStatus());
-        //썸네일은 기본적으로 첫번째 사진으로 지정 이후에 변경할 수 있도록 기능 구현
+
+        //썸네일은 기본적으로 없는거로 설정
         diary.setThumbnailFile(fileRepository.findAll().getFirst());
 
         //UserDiary 자동 생성 (사용자와 다이어리 연결)
         UserDiary userDiary = new UserDiary();
         userDiary.setUser(user);
         userDiary.setDiary(diary);
-        userDiary.setCreatedDate(LocalDateTime.now());
 
         userDiaryRepository.save(userDiary);
-
         //다이어리 저장
         diaryRepository.save(diary);
         //DiaryContent 저장
@@ -81,36 +81,66 @@ public class DiaryService {
     }
 
     //다이어리 조회
-    public DiaryDto getDiary(Long diaryId) {
+    public DiaryDto getDiary(Long diaryId, User currentUser) {
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new RuntimeException("not found diary"));
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
+
         return Diary.EntityToDto(diary);
     }
 
     //전체 다이어리 조회
     public List<DiaryDto> getAllDiary() {
+
         return diaryRepository.findAll().stream().map(Diary::EntityToDto).collect(Collectors.toList());
     }
 
     //다이어리 수정
     @Transactional
-    public DiaryDto updateDiary(Long diaryId, DiaryDto diaryDto) {
+    public DiaryDto updateDiary(Long diaryId, DiaryDto diaryDto, User currentUser) {
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new RuntimeException("not found diary"));
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
 
         diary.setTitle(diaryDto.getTitle());
-        diary.setUpdatedDate(LocalDateTime.now());
         diary.setStatus(diaryDto.getStatus());
-        //썸네일 변경은 별도의 메소드로 구현
 
         return Diary.EntityToDto(diary);
     }
 
+    //다이어리 제목 수정
+    @Transactional
+    public void updateDiaryTitle(Long diaryId, String title, User currentUser) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
+
+        diary.setTitle(title);
+
+        diaryRepository.save(diary);
+    }
+
+    //다이어리 상태 변경
+    @Transactional
+    public void updateDiaryStatus(Long diaryId, DiaryStatus diaryStatus, User currentUser) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
+
+        diary.setStatus(diaryStatus);
+
+        diaryRepository.save(diary);
+    }
+
     //다이어리 썸네일 수정(새로운 사진으로 변경)
     @Transactional
-    public File updateDiaryThumbnailNew(Long diaryId, MultipartFile file) {
+    public File updateDiaryThumbnailNew(Long diaryId, MultipartFile file, User currentUser) {
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new NoSuchElementException("not found diary"));
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
 
         File ThumbnailFile = fileS3UploadService.uploadAndSaveFile(file);
         diary.setThumbnailFile(ThumbnailFile);
@@ -119,22 +149,27 @@ public class DiaryService {
 
     //다이어리 썸네일 수정(원래 있던 사진으로 변경)
     @Transactional
-    public File updateDiaryThumbnail(Long diaryId, Long fileId) {
+    public File updateDiaryThumbnail(Long diaryId, Long fileId, User currentUser) {
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new NoSuchElementException("not found diary"));
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
 
         File ThumbnailFile = fileRepository.findById(fileId)
-                .orElseThrow(() -> new NoSuchElementException("not found file"));
+                .orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
+
         diary.setThumbnailFile(ThumbnailFile);
         return ThumbnailFile;
     }
 
     //다이어리 삭제
-    public void deleteDiary(Long diaryId) {
+    public void deleteDiary(Long diaryId, User currentUser) {
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new RuntimeException("not found diary"));
-        //다이어리 컨텐츠들 모두 삭제
-        diary.getContents().forEach(diaryContentRepository::delete);
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
+
+        //다이어리 컨텐츠들도 모두 삭제
         diaryRepository.delete(diary);
     }
 }
