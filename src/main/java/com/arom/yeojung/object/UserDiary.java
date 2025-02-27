@@ -28,8 +28,6 @@ public class UserDiary extends BaseTimeEntity{
     @JoinColumn(name = "diaryId", nullable = false)
     private Diary diary;
 
-    private LocalDateTime createdDate;
-
     public static UserDiaryDto EntityToDto(UserDiary userDiary) {
         UserDiaryDto dto = new UserDiaryDto();
         dto.setCreatedDate(userDiary.getCreatedDate());

@@ -4,8 +4,6 @@ import com.arom.yeojung.object.dto.DiaryContentDto;
 import com.arom.yeojung.object.dto.DiaryDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +22,8 @@ public class Diary extends BaseTimeEntity{
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    //@OneToOne
-    //private TotalPlan totalPlan;
-    //계획을 전체 계획이랑 연결할건지 세부계획이랑 연결할건지 회의
+    @OneToOne
+    private TotalPlan totalPlan;
 
     //제목
     private String title;
@@ -73,5 +70,12 @@ public class Diary extends BaseTimeEntity{
                         .collect(Collectors.toList());*/
         //dto.setContents(contentDtos);
         return dto;
+    }
+
+    public void addContent(DiaryContent diarycontent) {
+        if(this.contents == null) {
+            this.contents = new ArrayList<>();
+        }
+        this.contents.add(diarycontent);
     }
 }
