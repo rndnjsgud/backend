@@ -34,7 +34,6 @@ public class DiaryContentService extends BaseTimeEntity {
 
         validateAuthorization(diary, currentUser);
 
-        //예외처리 수정
         //새로운 파일 업로드
         File upLoadFile = fileS3UploadService.uploadAndSaveFile(file);
 
@@ -84,6 +83,10 @@ public class DiaryContentService extends BaseTimeEntity {
 
         DiaryContent diaryContent = diaryContentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_CONTENT_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
 
         // 텍스트 변경
         if (contentDto.getContent() != null) {
@@ -102,8 +105,8 @@ public class DiaryContentService extends BaseTimeEntity {
         //}
 
         //다이어리에 변경사항 저장
-        Diary diary = diaryContent.getDiary();
-        diaryRepository.save(diary);
+        Diary updatediary = diaryContent.getDiary();
+        diaryRepository.save(updatediary);
 
         return DiaryContent.EntityToDto(diaryContent);
     }
@@ -113,10 +116,14 @@ public class DiaryContentService extends BaseTimeEntity {
     public void updateContentText(Long diaryId, Long contentId, String text, User currentUser) {
         DiaryContent diaryContent = diaryContentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_CONTENT_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
+        validateAuthorization(diary, currentUser);
 
         diaryContent.setContent(text);
-        Diary diary = diaryContent.getDiary();
-        diaryRepository.save(diary);
+        Diary updatediary = diaryContent.getDiary();
+        diaryRepository.save(updatediary);
     }
 
     //다이어리 컨텐츠 중 미디어 수정
@@ -124,16 +131,23 @@ public class DiaryContentService extends BaseTimeEntity {
     public void updateContentMedia(Long diaryId, Long contentId, MultipartFile file, User currentUser) {
         DiaryContent diaryContent = diaryContentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_CONTENT_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        validateAuthorization(diary, currentUser);
+
         File upLoadFile = fileS3UploadService.uploadAndSaveFile(file);
         diaryContent.setFile(upLoadFile);
-        Diary diary = diaryContent.getDiary();
-        diaryRepository.save(diary);
+        Diary updatediary = diaryContent.getDiary();
+        diaryRepository.save(updatediary);
     }
 
     //컨텐츠 순서 변경
     @Transactional
     public void updateContentSequence(Long diaryId, Long contentId, Long newSequence, User currentUser) {
         List<DiaryContent> contents = diaryContentRepository.findByDiaryId(diaryId);
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        validateAuthorization(diary, currentUser);
 
         DiaryContent targetContent = contents.stream()
                 .filter(c -> c.getId().equals(contentId))
@@ -170,6 +184,10 @@ public class DiaryContentService extends BaseTimeEntity {
     public DiaryContentDto getDiaryContent(Long diaryId, Long contentId, User currentUser) {
          DiaryContent diaryContent = diaryContentRepository.findById(contentId)
                  .orElseThrow(() -> new CustomException(ErrorCode.DIARY_CONTENT_NOT_FOUND));
+         Diary diary = diaryRepository.findById(diaryId)
+                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+         validateAuthorization(diary, currentUser);
+
          //컨텐츠의 다이어리 아이디가 전달 받은 아이디랑 같을때만 실행
          if(diaryContent.getDiary().getId().equals(diaryId)) {
              return DiaryContent.EntityToDto(diaryContent);
@@ -178,7 +196,7 @@ public class DiaryContentService extends BaseTimeEntity {
     }
 
     //다이어리 컨텐츠 모두 조회
-    public List<DiaryContentDto> getAllDiaryContents(Long diaryId, User currentUser) {
+    public List<DiaryContentDto> getAllDiaryContents(Long diaryId) {
         List<DiaryContentDto> contentDtos = diaryContentRepository.findByDiaryId(diaryId)
                 .stream().map(DiaryContent::EntityToDto).collect(Collectors.toList());
         return contentDtos;
@@ -189,6 +207,10 @@ public class DiaryContentService extends BaseTimeEntity {
     public void deleteDiaryContent(Long diaryId, Long contentId, User currentUser) {
         DiaryContent diaryContent = diaryContentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_CONTENT_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        validateAuthorization(diary, currentUser);
+
         if(diaryContent.getDiary().getId().equals(diaryId)) {
             diaryContentRepository.delete(diaryContent);
         }
