@@ -12,18 +12,27 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    //private User user;
+    private Long Id;
 
     @ManyToOne
-    @JoinColumn(name = "diaryid", nullable = false)
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "diaryId", nullable = false)
     private Diary diary;
 
     private String content;
-    private LocalDateTime createdAt;
+
+    public static CommentDto EntityToDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setUserId(comment.getUser().getId());
+        commentDto.setContent(comment.getContent());
+        commentDto.setCreatedAt(comment.getCreatedDate());
+        return commentDto;
+    }
 }
