@@ -26,6 +26,10 @@ public enum ErrorCode {
 
   ALREADY_FOLLOWING(HttpStatus.BAD_REQUEST, "이미 팔로우 중입니다."),
 
+  ALREADY_REQUESTED_FRIENDSHIP(HttpStatus.BAD_REQUEST, "이미 친구 요청이 존재합니다."),
+
+  REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "친구 요청을 찾을 수 없습니다."),
+
   // File
 
   FILE_SIZE_EXCEED(HttpStatus.PAYLOAD_TOO_LARGE, "업로드 가능한 파일 크기를 초과했습니다."),

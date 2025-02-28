@@ -1,11 +1,11 @@
 package com.arom.yeojung.object;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,20 +15,20 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Follow extends BaseTimeEntity{
+public class Friendship {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long followId;
+  private Long friendshipId;
 
-  // 팔로우 하는 사람
-  @ManyToOne(fetch = FetchType.LAZY)
-  private User follower;
+  @ManyToOne
+  @NotNull
+  private User user1;
 
-  // 팔로우 받는 사람
-  @ManyToOne(fetch = FetchType.LAZY)
-  private User followee;
+  @ManyToOne
+  @NotNull
+  private User user2;
 }
