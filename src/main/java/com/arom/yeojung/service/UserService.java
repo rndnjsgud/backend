@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class UserService {
 
-  private final S3Uploader s3Uploader;
+  private final FileS3UploadService s3Uploader;
   private final UserRepository userRepository;
   private static final long MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB 제한
 
@@ -82,7 +82,7 @@ public class UserService {
     }
 
     // 새 프로필 사진 업로드
-    String imageUrl = s3Uploader.uploadFile(profileImage, "profile");
+    String imageUrl = s3Uploader.uploadAndSaveFile(profileImage).getFileUrl();
 
     // DB에 업데이트 (등록 or 변경)
     user.setProfileImageUrl(imageUrl);
