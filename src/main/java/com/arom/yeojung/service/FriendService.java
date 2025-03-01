@@ -1,8 +1,8 @@
 package com.arom.yeojung.service;
 
-import com.arom.yeojung.object.FriendRequest;
-import com.arom.yeojung.object.FriendStatus;
-import com.arom.yeojung.object.Friendship;
+import com.arom.yeojung.object.dto.user.FriendRequest;
+import com.arom.yeojung.object.dto.user.FriendStatus;
+import com.arom.yeojung.object.dto.user.Friendship;
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.dto.user.FriendDto;
 import com.arom.yeojung.object.dto.user.UserDto;

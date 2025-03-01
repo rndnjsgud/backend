@@ -1,8 +1,7 @@
-package com.arom.yeojung.object;
+package com.arom.yeojung.object.dto.user;
 
+import com.arom.yeojung.object.User;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,21 +19,17 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FriendRequest {
+public class Friendship {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long friendRequestId;
+  private Long friendshipId;
 
   @ManyToOne
   @NotNull
-  private User sender;
+  private User user1;
 
   @ManyToOne
   @NotNull
-  private User receiver;
-
-  @Enumerated(EnumType.STRING)
-  private FriendStatus status;
-
+  private User user2;
 }
