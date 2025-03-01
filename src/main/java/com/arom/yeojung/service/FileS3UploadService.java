@@ -1,8 +1,10 @@
 package com.arom.yeojung.service;
 
 
-import java.io.IOException;
-import java.util.UUID;
+import com.arom.yeojung.object.File;
+import com.arom.yeojung.repository.FileRepository;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,16 +18,22 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class S3Uploader {
-
+public class FileS3UploadService {
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; //10MB 최대 파일 사이즈
     private final String bucketName = "yeojung-bucket";
     private final S3Client s3Client;
+    private final FileService fileService;
 
-    public S3Uploader() {
+    public FileS3UploadService(FileService fileService) {
+        this.fileService = fileService;
         this.s3Client = S3Client.builder()
                 .region(Region.AP_NORTHEAST_2) //서울 지역
                 .credentialsProvider(StaticCredentialsProvider.create(
@@ -36,19 +44,24 @@ public class S3Uploader {
                 .build();
     }
 
-    public String uploadFile(MultipartFile file, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+    public File uploadAndSaveFile(MultipartFile file) {
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
+        }
 
-        try {
+        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+        String fileUrl = "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+
+        try (InputStream inputStream = file.getInputStream()) { //inputStream 사용
             s3Client.putObject(PutObjectRequest.builder()
                             .bucket(bucketName)
                             .key(fileName)
+                            .contentType(file.getContentType())
                             .build(),
-                    RequestBody.fromBytes(file.getBytes()));
-
-            return "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+                    RequestBody.fromInputStream(inputStream, file.getSize())); //메모리 사용량 최적화
+            return fileService.save(fileName, fileUrl);
         } catch (IOException e) {
-            throw new RuntimeException("S3 Failed to upload file", e);
+            throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
         }
     }
 
