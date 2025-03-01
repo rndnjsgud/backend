@@ -1,15 +1,16 @@
 package com.arom.yeojung.repository;
 
-
-
 import com.arom.yeojung.object.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findById(Long Id);
 
-    Boolean existsByUsername(String username);
-    User findByUsername(String username);
+  Optional<User> findByUserId(Long userId);
+
+  Optional<User> findByUsername(String username);
+
+  Boolean existsByNickname(String nickname);
+
+  Boolean existsByUsername(String username);
 }
