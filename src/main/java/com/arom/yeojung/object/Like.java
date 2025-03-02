@@ -12,17 +12,19 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 @Table(name = "likes")
-public class Like {
+public class Like extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    //private User user;
+    private Long Id;
 
     @ManyToOne
-    @JoinColumn(name = "diaryid", nullable = false)
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "diaryId", nullable = false)
     private Diary diary;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 }

@@ -1,10 +1,14 @@
 package com.arom.yeojung.object;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,4 +41,19 @@ public class User extends BaseTimeEntity{
 
   // 프로필 사진 URL
   private String profileImageUrl;
+
+  // 팔로워 수
+  private int followerCount;
+
+  // 팔로워 증가
+  public void increaseFollowerCount() {
+    this.followerCount++;
+  }
+
+  // 팔로워 감소 (0 이하로 내려가지 않도록 처리)
+  public void decreaseFollowerCount() {
+    if (this.followerCount > 0) {
+      this.followerCount--;
+    }
+  }
 }

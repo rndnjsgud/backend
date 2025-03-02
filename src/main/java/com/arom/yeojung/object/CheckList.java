@@ -1,22 +1,23 @@
 package com.arom.yeojung.object;
 
+import com.arom.yeojung.object.dto.CheckListRequestDTO;
+import com.arom.yeojung.object.dto.CheckListResponseDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CheckList {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkListId;
 
     //할일 목록
-    @Column(nullable = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String task;
 
     //완료 여부
@@ -25,9 +26,11 @@ public class CheckList {
 
     //체크리스트 설명
     @Column(nullable = true)
-    private String discription;
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planId", nullable = false)
     private TotalPlan totalPlan;
 }
+
+
