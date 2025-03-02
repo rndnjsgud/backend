@@ -29,13 +29,13 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(String username, String role, Long expiredMs) {
+    public String createJwt(String username, Long expiredMs) {
 
         return Jwts.builder()
                 .claim("username", username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(secretKey)
+                .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
     }
 }
