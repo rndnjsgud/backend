@@ -19,7 +19,7 @@ public enum ErrorCode {
   // User
 
 
-  EXIST_USER(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자입니다.");
+  EXIST_USER(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자입니다."),
 
   USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다"),
 
