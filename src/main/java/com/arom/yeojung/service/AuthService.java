@@ -3,11 +3,15 @@ package com.arom.yeojung.service;
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.dto.AuthDto;
 import com.arom.yeojung.repository.UserRepository;
+import com.arom.yeojung.util.exception.CustomException;
+import com.arom.yeojung.util.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthService {
 
@@ -22,8 +26,7 @@ public class AuthService {
         Boolean isExist = userRepository.existsByUsername(username);
 
         if (isExist){
-
-            return;
+            throw new CustomException(ErrorCode.EXIST_USER);
         }
 
         User data = new User();
