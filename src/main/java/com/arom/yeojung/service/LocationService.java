@@ -24,9 +24,10 @@ public class LocationService {
     @Transactional
     public LocationResponseDTO createLocation(LocationRequestDTO dto) {
         Location location = Location.builder()
-                .locationCity(dto.getLocationCity())
-                .locationDistrict(dto.getLocationDistrict())
-                .locationAddress(dto.getLocationAddress())
+                .country(dto.getCountry())
+                .city(dto.getCity())
+                .district(dto.getDistrict())
+                .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .locationType(dto.getLocationType())
@@ -66,9 +67,9 @@ public class LocationService {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.LOCATION_NOT_FOUND));
 
-        location.setLocationCity(dto.getLocationCity());
-        location.setLocationDistrict(dto.getLocationDistrict());
-        location.setLocationAddress(dto.getLocationAddress());
+        location.setCity(dto.getCity());
+        location.setDistrict(dto.getDistrict());
+        location.setAddress(dto.getAddress());
         location.setLatitude(dto.getLatitude());
         location.setLongitude(dto.getLongitude());
         location.setLocationType(dto.getLocationType());
@@ -90,9 +91,9 @@ public class LocationService {
     private LocationResponseDTO mapToResponseDTO(Location location) {
         return LocationResponseDTO.builder()
                 .locationId(location.getLocationId())
-                .locationCity(location.getLocationCity())
-                .locationDistrict(location.getLocationDistrict())
-                .locationAddress(location.getLocationAddress())
+                .city(location.getCity())
+                .district(location.getDistrict())
+                .address(location.getAddress())
                 .latitude(location.getLatitude())
                 .longitude(location.getLongitude())
                 .locationType(location.getLocationType())
