@@ -7,6 +7,7 @@ import com.arom.yeojung.object.dto.BudgetRequestDTO;
 import com.arom.yeojung.object.dto.BudgetResponseDTO;
 import com.arom.yeojung.repository.BudgetRepository;
 import com.arom.yeojung.repository.SubPlanRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class BudgetService {
     private final SubPlanRepository subPlanRepository;
 
     // 생성
+    @Transactional
     public BudgetResponseDTO createBudget(BudgetRequestDTO dto) {
         // 요청에 담긴 subPlanId를 통해 SubPlan 엔티티 조회
         SubPlan subPlan = subPlanRepository.findById(dto.getSubPlanId())
@@ -40,6 +42,7 @@ public class BudgetService {
     }
 
     // 단건 조회
+    @Transactional
     public BudgetResponseDTO getBudget(Long id) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Budget not found with id: " + id));
@@ -47,6 +50,7 @@ public class BudgetService {
     }
 
     // 전체 조회
+    @Transactional
     public List<BudgetResponseDTO> getAllBudgets() {
         return budgetRepository.findAll().stream()
                 .map(this::mapToResponseDTO)
@@ -54,6 +58,7 @@ public class BudgetService {
     }
 
     // budgetType에 따른 조회
+    @Transactional
     public List<BudgetResponseDTO> getBudgetsByBudgetType(BudgetType budgetType){
         return budgetRepository.findByBudgetType(budgetType).stream()
                 .map(this::mapToResponseDTO)
@@ -61,6 +66,7 @@ public class BudgetService {
     }
 
     //subPlanId에 따른 조회
+    @Transactional
     public List<BudgetResponseDTO> getBudgetListsBySubPlanId(Long subPlanID) {
         List<Budget> budgetList = budgetRepository.findBySubPlan_SubPlanId(subPlanID);
         return budgetList.stream()
@@ -69,6 +75,7 @@ public class BudgetService {
     }
 
     // 수정
+    @Transactional
     public BudgetResponseDTO updateBudget(Long id, BudgetRequestDTO dto) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Budget not found with id: " + id));
@@ -89,6 +96,7 @@ public class BudgetService {
     }
 
     // 삭제
+    @Transactional
     public void deleteBudget(Long id) {
         if (!budgetRepository.existsById(id)) {
             throw new RuntimeException("Budget not found with id: " + id);
