@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TotalPlan {
+public class TotalPlan extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

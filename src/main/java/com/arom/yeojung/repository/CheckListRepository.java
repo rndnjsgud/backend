@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     // TotalPlan 엔티티의 planId를 기준으로 조회
-    List<CheckList> findByTotalPlan_PlanId(Long planId);
+    List<CheckList> findByTotalPlan_TotalPlanId(Long totalPlanId);
 }

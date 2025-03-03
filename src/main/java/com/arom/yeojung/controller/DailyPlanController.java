@@ -29,7 +29,7 @@ public class DailyPlanController {
 
     private final DailyPlanService dailyPlanService;
 
-    // 특정 DailyPlan 조회 (TotalPlan 내에서)
+    // totalPlan 내에서 특정 dailyPlan 조회
     @GetMapping("/{dailyPlanId}")
     public ResponseEntity<DailyPlanResponseDTO> getDailyPlan(
             @PathVariable Long totalPlanId,
@@ -38,17 +38,18 @@ public class DailyPlanController {
         return ResponseEntity.ok(response);
     }
 
-    // DailyPlan 생성 (TotalPlan에 속한 DailyPlan 추가)
+    // 생성 (totalPlan에 속한 dailyPlan 추가)
     @PostMapping
-    public ResponseEntity<DailyPlanResponseDTO> createDailyPlan(
-            @PathVariable Long totalPlanId,
-            @RequestBody @Valid DailyPlanRequestDTO requestDTO,
-            @AuthenticationPrincipal User currentUser) {
-        DailyPlanResponseDTO response = dailyPlanService.createDailyPlan(totalPlanId, requestDTO, currentUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<List<DailyPlanResponseDTO>> createDailyPlans(
+        @PathVariable Long totalPlanId,
+        @RequestBody @Valid DailyPlanRequestDTO requestDTO,
+        @AuthenticationPrincipal User currentUser) {
+        List<DailyPlanResponseDTO> responses = dailyPlanService.createDailyPlansForTotalPlan(totalPlanId, requestDTO, currentUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responses);
     }
 
-    // DailyPlan 수정
+
+    // 수정
     @PutMapping("/{dailyPlanId}")
     public ResponseEntity<DailyPlanResponseDTO> updateDailyPlan(
             @PathVariable Long totalPlanId,
@@ -59,7 +60,7 @@ public class DailyPlanController {
         return ResponseEntity.ok(response);
     }
 
-    // DailyPlan 삭제
+    // 삭제
     @DeleteMapping("/{dailyPlanId}")
     public ResponseEntity<Void> deleteDailyPlan(
             @PathVariable Long totalPlanId,

@@ -9,6 +9,7 @@ import com.arom.yeojung.repository.LocationRepository;
 import com.arom.yeojung.repository.TotalPlanRepository;
 import com.arom.yeojung.util.exception.CustomException;
 import com.arom.yeojung.util.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ import java.util.stream.Collectors;
 public class LocationService {
     private final LocationRepository locationRepository;
     // 생성
+    @Transactional
     public LocationResponseDTO createLocation(LocationRequestDTO dto) {
         Location location = Location.builder()
-                .locationCity(dto.getLocationCity())
-                .locationDistrict(dto.getLocationDistrict())
-                .locationAddress(dto.getLocationAddress())
+                .country(dto.getCountry())
+                .city(dto.getCity())
+                .district(dto.getDistrict())
+                .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .locationType(dto.getLocationType())
@@ -35,6 +38,7 @@ public class LocationService {
     }
 
     // 조회 (단건)
+    @Transactional
     public LocationResponseDTO getLocation(Long id) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.LOCATION_NOT_FOUND));
@@ -42,6 +46,7 @@ public class LocationService {
     }
 
     // 전체 조회
+    @Transactional
     public List<LocationResponseDTO> getAllLocations() {
         return locationRepository.findAll().stream()
                 .map(this::mapToResponseDTO)
@@ -49,6 +54,7 @@ public class LocationService {
     }
 
     // LocationType에 따른 조회
+    @Transactional
     public List<LocationResponseDTO> getLocationsByType(LocationType locationType){
         return locationRepository.findByLocationType(locationType).stream()
                 .map(this::mapToResponseDTO)
@@ -56,13 +62,14 @@ public class LocationService {
     }
 
     // 수정
+    @Transactional
     public LocationResponseDTO updateLocation(Long id, LocationRequestDTO dto) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.LOCATION_NOT_FOUND));
 
-        location.setLocationCity(dto.getLocationCity());
-        location.setLocationDistrict(dto.getLocationDistrict());
-        location.setLocationAddress(dto.getLocationAddress());
+        location.setCity(dto.getCity());
+        location.setDistrict(dto.getDistrict());
+        location.setAddress(dto.getAddress());
         location.setLatitude(dto.getLatitude());
         location.setLongitude(dto.getLongitude());
         location.setLocationType(dto.getLocationType());
@@ -72,6 +79,7 @@ public class LocationService {
     }
 
     // 삭제
+    @Transactional
     public void deleteLocation(Long id) {
         if(!locationRepository.existsById(id)){
             throw new CustomException(ErrorCode.LOCATION_NOT_FOUND);
@@ -83,9 +91,9 @@ public class LocationService {
     private LocationResponseDTO mapToResponseDTO(Location location) {
         return LocationResponseDTO.builder()
                 .locationId(location.getLocationId())
-                .locationCity(location.getLocationCity())
-                .locationDistrict(location.getLocationDistrict())
-                .locationAddress(location.getLocationAddress())
+                .city(location.getCity())
+                .district(location.getDistrict())
+                .address(location.getAddress())
                 .latitude(location.getLatitude())
                 .longitude(location.getLongitude())
                 .locationType(location.getLocationType())
