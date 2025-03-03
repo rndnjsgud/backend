@@ -15,17 +15,21 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
 
+    // 국가명 추가 (예: "대한민국", "USA")
+    @Column(nullable = false, length = 50)
+    private String country;
+
     //시
     @Column(nullable = false, length = 50)
-    private String locationCity;
+    private String city;
 
     //군, 구
     @Column(nullable = false, length = 50)
-    private String locationDistrict;
+    private String district;
 
     //주소
     @Column(nullable = false)
-    private String locationAddress;
+    private String address;
 
     //위도
     @Column(nullable = false, precision = 9, scale = 6)

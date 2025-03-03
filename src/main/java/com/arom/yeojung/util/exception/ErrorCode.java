@@ -18,6 +18,9 @@ public enum ErrorCode {
 
   // User
 
+
+  EXIST_USER(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자입니다."),
+
   USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다"),
 
   DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
@@ -76,6 +79,7 @@ public enum ErrorCode {
   FILE_SIZE_EXCEED(HttpStatus.PAYLOAD_TOO_LARGE, "업로드 가능한 파일 크기를 초과했습니다."),
   FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
   INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다.");
+
 
 
   private final HttpStatus status;

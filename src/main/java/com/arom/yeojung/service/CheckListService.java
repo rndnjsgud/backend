@@ -9,6 +9,7 @@ import com.arom.yeojung.repository.TotalPlanRepository;
 import com.arom.yeojung.util.exception.CustomException;
 import com.arom.yeojung.util.exception.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class CheckListService {
     private final CheckListRepository checkListRepository;
     private final TotalPlanRepository totalPlanRepository;
 
+    @Transactional
     public CheckListResponseDTO createCheckList(CheckListRequestDTO requestDTO) {
         // DTO에 포함된 planId를 사용해 연결된 TotalPlan 엔티티 조회
         TotalPlan totalPlan = totalPlanRepository.findById(requestDTO.getTotalPlanId())
@@ -42,6 +44,7 @@ public class CheckListService {
     }
 
     // 한 planId에 속하는 모든 체크리스트 조회
+    @Transactional
     public List<CheckListResponseDTO> getCheckListsByTotalPlanId(Long planId) {
         List<CheckList> checklistList = checkListRepository.findByTotalPlan_TotalPlanId(planId);
         return checklistList.stream()
@@ -50,6 +53,7 @@ public class CheckListService {
     }
 
     // 전체 체크리스트 조회 메소드
+    @Transactional
     public List<CheckListResponseDTO> getAllCheckLists() {
         List<CheckList> checklistList = checkListRepository.findAll();
         return checklistList.stream()
@@ -58,6 +62,7 @@ public class CheckListService {
     }
 
     // 체크리스트 수정 메소드
+    @Transactional
     public CheckListResponseDTO updateCheckList(Long id, CheckListRequestDTO updateDTO) {
         // 수정할 체크리스트 조회
         CheckList checklist = checkListRepository.findById(id)
@@ -83,6 +88,7 @@ public class CheckListService {
     }
 
     // 체크리스트 삭제 메소드
+    @Transactional
     public void deleteCheckList(Long id) {
         // 삭제할 체크리스트 존재 여부 확인
         CheckList checkList = checkListRepository.findById(id)

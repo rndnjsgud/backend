@@ -10,14 +10,17 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class LocationRequestDTO {
+    // 국가명
+    private String country;
+
     //시
-    private String locationCity;
+    private String city;
 
     //군, 구
-    private String locationDistrict;
+    private String district;
 
     //주소
-    private String locationAddress;
+    private String address;
 
     //위도
     private BigDecimal latitude;
