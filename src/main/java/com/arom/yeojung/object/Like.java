@@ -1,22 +1,22 @@
 package com.arom.yeojung.object;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "likes")
 public class Like extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Column(name = "like_id")
+    private Long likeId;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -25,6 +25,4 @@ public class Like extends BaseTimeEntity{
     @ManyToOne
     @JoinColumn(name = "diaryId", nullable = false)
     private Diary diary;
-
-    private LocalDateTime createdDate;
 }
