@@ -19,10 +19,10 @@ public class Like extends BaseTimeEntity{
     private Long likeId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "diaryId", nullable = false)
+    @JoinColumn(name = "diary_id", nullable = false)
     private Diary diary;
 }
