@@ -24,7 +24,7 @@ import lombok.Setter;
 public class User extends BaseTimeEntity{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
 
   // 아이디
