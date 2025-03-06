@@ -22,7 +22,7 @@ import lombok.Setter;
 public class Friendship {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long friendshipId;
 
   @ManyToOne
