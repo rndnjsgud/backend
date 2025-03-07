@@ -4,7 +4,6 @@ import com.arom.yeojung.object.FriendRequest;
 import com.arom.yeojung.object.Friendship;
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.constants.FriendStatus;
-import com.arom.yeojung.object.dto.user.FriendDto;
 import com.arom.yeojung.object.dto.user.UserDto;
 import com.arom.yeojung.repository.FriendRequestRepository;
 import com.arom.yeojung.repository.FriendshipRepository;
@@ -100,12 +99,20 @@ public class FriendService {
 
   // 사용자의 친구 리스트
   @Transactional(readOnly = true)
-  public List<FriendDto> getFriendList(User user) {
-    List<Friendship> friends = friendshipRepository.findFriendshipByUserId(user.getUserId());
-    return friends.stream().map(friend -> FriendDto.builder()
-            .user1(friend.getUser1())
-            .user2(friend.getUser2())
-            .build())
+  public List<UserDto> getFriendList(User user) {
+    List<Friendship> friends = friendshipRepository.findByUser1_UserIdOrUser2_UserId(user.getUserId(), user.getUserId());
+
+    return friends.stream()
+        .map(friend -> friend.getUser1().getUserId().equals(user.getUserId()) ? friend.getUser2() : friend.getUser1()) // User 가 아닌 사용자를 선택
+        .map(this::userToUserDto)
         .collect(Collectors.toList());
+  }
+
+  private UserDto userToUserDto(User user) {
+    return UserDto.builder()
+        .username(user.getUsername())
+        .nickname(user.getNickname())
+        .profileImageUrl(user.getProfileImageUrl())
+        .build();
   }
 }

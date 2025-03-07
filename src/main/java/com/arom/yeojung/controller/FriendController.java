@@ -2,7 +2,6 @@ package com.arom.yeojung.controller;
 
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.dto.user.CustomUserDetails;
-import com.arom.yeojung.object.dto.user.FriendDto;
 import com.arom.yeojung.object.dto.user.UserDto;
 import com.arom.yeojung.service.FriendService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,16 +61,14 @@ public class FriendController {
   public ResponseEntity<List<UserDto>> getFriendRequests(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     User user = userDetails.getUser();
-    List<UserDto> friendRequests = friendService.getFriendRequest(user);
-    return ResponseEntity.ok(friendRequests);
+    return ResponseEntity.ok(friendService.getFriendRequest(user));
   }
 
   // 사용자의 친구 리스트 조회
   @GetMapping("/list")
-  public ResponseEntity<List<FriendDto>> getFriendList(
+  public ResponseEntity<List<UserDto>> getFriendList(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     User user = userDetails.getUser();
-    List<FriendDto> friendList = friendService.getFriendList(user);
-    return ResponseEntity.ok(friendList);
+    return ResponseEntity.ok(friendService.getFriendList(user));
   }
 }
