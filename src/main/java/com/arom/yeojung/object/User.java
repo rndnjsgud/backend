@@ -1,14 +1,10 @@
 package com.arom.yeojung.object;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +32,7 @@ public class User extends BaseTimeEntity{
   private String password;
 
   // 닉네임
-  @Column(unique = true, nullable = false)
+  @Column(unique = true)
   private String nickname;
 
   // 프로필 사진 URL
