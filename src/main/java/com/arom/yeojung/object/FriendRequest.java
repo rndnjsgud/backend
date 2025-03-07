@@ -1,6 +1,6 @@
-package com.arom.yeojung.object.dto.user;
+package com.arom.yeojung.object;
 
-import com.arom.yeojung.object.User;
+import com.arom.yeojung.object.constants.FriendStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,5 +37,4 @@ public class FriendRequest {
 
   @Enumerated(EnumType.STRING)
   private FriendStatus status;
-
 }

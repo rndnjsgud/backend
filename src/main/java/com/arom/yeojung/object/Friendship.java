@@ -1,6 +1,5 @@
-package com.arom.yeojung.object.dto.user;
+package com.arom.yeojung.object;
 
-import com.arom.yeojung.object.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
