@@ -14,4 +14,7 @@ public class TotalPlanResponseDTO {
   private Long totalBudget;
   private String totalPlanDescription;
   private int travelDuration;
+
+  private String planThumbnailFileName;
+  private String planThumbnailFileUrl;
 }

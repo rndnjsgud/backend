@@ -1,5 +1,6 @@
 package com.arom.yeojung.service;
 
+import com.arom.yeojung.object.File;
 import com.arom.yeojung.object.TotalPlan;
 import com.arom.yeojung.object.User;
 import com.arom.yeojung.object.UserPlan;
@@ -47,16 +48,22 @@ public class TotalPlanService {
     totalPlan.setTotalPlanDescription(requestDTO.getTotalPlanDescription());
     totalPlan.setTravelDuration(requestDTO.getTravelDuration());
 
+    // planThumbnail 처리
+    if (requestDTO.getPlanThumbnailFileName() != null && requestDTO.getPlanThumbnailFileUrl() != null) {
+      File thumbnail = new File();
+      thumbnail.setFileName(requestDTO.getPlanThumbnailFileName());
+      thumbnail.setFileUrl(requestDTO.getPlanThumbnailFileUrl());
+      totalPlan.setPlanThumbnail(thumbnail);
+    }
+
     // UserPlan 생성 (OWNER)
     UserPlan ownerUserPlan = new UserPlan();
     ownerUserPlan.setUser(currentUser);
     ownerUserPlan.setTotalPlan(totalPlan);
     ownerUserPlan.setRole(PlanRole.OWNER);
-
     totalPlan.getMembers().add(ownerUserPlan);
 
     totalPlanRepository.save(totalPlan);
-
     return mapToResponseDto(totalPlan);
   }
 
@@ -80,8 +87,20 @@ public class TotalPlanService {
     totalPlan.setTotalPlanDescription(requestDTO.getTotalPlanDescription());
     totalPlan.setTravelDuration(requestDTO.getTravelDuration());
 
-    totalPlan.markAsUpdated();
+    // planThumbnail 업데이트 처리
+    if (requestDTO.getPlanThumbnailFileName() != null && requestDTO.getPlanThumbnailFileUrl() != null) {
+      if (totalPlan.getPlanThumbnail() == null) {
+        File thumbnail = new File();
+        thumbnail.setFileName(requestDTO.getPlanThumbnailFileName());
+        thumbnail.setFileUrl(requestDTO.getPlanThumbnailFileUrl());
+        totalPlan.setPlanThumbnail(thumbnail);
+      } else {
+        totalPlan.getPlanThumbnail().setFileName(requestDTO.getPlanThumbnailFileName());
+        totalPlan.getPlanThumbnail().setFileUrl(requestDTO.getPlanThumbnailFileUrl());
+      }
+    }
 
+    totalPlan.markAsUpdated();
     totalPlanRepository.save(totalPlan);
 
     return mapToResponseDto(totalPlan);
@@ -136,6 +155,10 @@ public class TotalPlanService {
         .totalBudget(totalPlan.getTotalBudget())
         .totalPlanDescription(totalPlan.getTotalPlanDescription())
         .travelDuration(totalPlan.getTravelDuration())
+        .planThumbnailFileName(
+            totalPlan.getPlanThumbnail() != null ? totalPlan.getPlanThumbnail().getFileName() : null)
+        .planThumbnailFileUrl(
+            totalPlan.getPlanThumbnail() != null ? totalPlan.getPlanThumbnail().getFileUrl() : null)
         .build();
   }
 }

@@ -23,4 +23,7 @@ public class TotalPlanRequestDTO {
   private String totalPlanDescription;
 
   private int travelDuration;
+
+  private String planThumbnailFileName;
+  private String planThumbnailFileUrl;
 }
